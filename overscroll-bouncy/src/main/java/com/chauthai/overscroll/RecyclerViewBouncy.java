@@ -30,12 +30,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 
 /**
  * A RecyclerView which supports iOS-like over-scroll style.
  */
 public class RecyclerViewBouncy extends RecyclerView {
+
     private BouncyAdapter mBouncyAdapter;
     private Adapter mOriginalAdapter;
     private BouncyConfig mConfig = BouncyConfig.DEFAULT;
@@ -94,6 +94,10 @@ public class RecyclerViewBouncy extends RecyclerView {
     @Override
     public void smoothScrollToPosition(int position) {
         super.smoothScrollToPosition(position + 1);
+    }
+
+    public BouncyAdapter getBouncyAdapter() {
+        return mBouncyAdapter;
     }
 
     private void init(Context context, AttributeSet attributeSet) {

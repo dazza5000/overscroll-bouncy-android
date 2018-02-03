@@ -644,7 +644,7 @@ class BouncyAdapter extends RecyclerView.Adapter implements SpringScroller.Sprin
      * depends on the RecyclerView's direction.
      * @return visible size in pixels, 0 if not visible.
      */
-    private int getFooterVisibleLength() {
+    public int getFooterVisibleLength() {
         if (footerOccupiesWholeView()) {
             return mPrevFooterVisible;
         }
@@ -684,7 +684,7 @@ class BouncyAdapter extends RecyclerView.Adapter implements SpringScroller.Sprin
      * depends on the RecyclerView's direction.
      * @return visible size in pixels, 0 if not visible.
      */
-    private int getHeaderVisibleLength() {
+    public int getHeaderVisibleLength() {
         // header is not visible
         if (mLayoutManager.findFirstVisibleItemPosition() != 0)
             return 0;

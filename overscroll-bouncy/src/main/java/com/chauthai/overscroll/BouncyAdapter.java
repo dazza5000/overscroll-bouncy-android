@@ -46,7 +46,7 @@ import java.util.Locale;
  * An adapter class which wraps the original {@link android.support.v7.widget.RecyclerView.Adapter}
  * adapter to create the over-scroll bouncy effect.
  */
-class BouncyAdapter extends RecyclerView.Adapter implements SpringScroller.SpringScrollerListener {
+public class BouncyAdapter extends RecyclerView.Adapter implements SpringScroller.SpringScrollerListener {
     /**
      * The actual gap size (in dp). Not all portion of the gap will be visible.
      * The maximum visible size is defined in {@link BouncyConfig#gapLimit}
@@ -115,6 +115,7 @@ class BouncyAdapter extends RecyclerView.Adapter implements SpringScroller.Sprin
      * not correct.
      */
     private boolean isSpringFirstValue = true;
+    private ScrollStartListener scrollStartListener;
 
     public BouncyAdapter(Context context, RecyclerView recyclerView,
                           RecyclerView.Adapter adapter,  BouncyConfig config) {
@@ -512,9 +513,12 @@ class BouncyAdapter extends RecyclerView.Adapter implements SpringScroller.Sprin
                     final int headerVisible = getHeaderVisibleLength();
                     final int footerVisible = getFooterVisibleLength();
 
-                    int visible = (headerVisible > 0)? headerVisible : footerVisible;
+                    int visible = (headerVisible > 0) ? headerVisible : footerVisible;
 
                     if (visible > 0) {
+                        if (scrollStartListener != null) {
+                            scrollStartListener.onScrollStart();
+                        }
                         scrollByCount++;
                         mFirstScrollBy = (scrollByCount == 1);
 
@@ -727,7 +731,7 @@ class BouncyAdapter extends RecyclerView.Adapter implements SpringScroller.Sprin
      * @param view to be checked
      * @return visible size in pixels, 0 if not visible.
      */
-    private int getLeftVisible(View view) {
+    public int getLeftVisible(View view) {
         return Math.max(0, view.getRight() - mRecyclerView.getPaddingLeft());
     }
 
@@ -736,7 +740,7 @@ class BouncyAdapter extends RecyclerView.Adapter implements SpringScroller.Sprin
      * @param view to be checked
      * @return visible size in pixels, 0 if not visible.
      */
-    private int getRightVisible(View view) {
+    public int getRightVisible(View view) {
         return Math.max(0, mRecyclerView.getWidth() - view.getLeft() - mRecyclerView.getPaddingRight());
     }
 
@@ -845,6 +849,14 @@ class BouncyAdapter extends RecyclerView.Adapter implements SpringScroller.Sprin
                 return "settling";
         }
         return "";
+    }
+
+    public void setStartScrollListener(ScrollStartListener scrollStartListener) {
+        this.scrollStartListener = scrollStartListener;
+    }
+
+    interface ScrollStartListener {
+        void onScrollStart();
     }
 }
 

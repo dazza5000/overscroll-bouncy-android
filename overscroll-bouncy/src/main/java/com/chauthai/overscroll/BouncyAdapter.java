@@ -855,7 +855,7 @@ public class BouncyAdapter extends RecyclerView.Adapter implements SpringScrolle
         this.scrollStartListener = scrollStartListener;
     }
 
-    interface ScrollStartListener {
+    public interface ScrollStartListener {
         void onScrollStart();
     }
 }

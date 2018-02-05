@@ -41,14 +41,14 @@ ext {
 
     libraryDescription = 'An Android library which simulates iOS-like overscroll bounce animation.'
 
-    siteUrl = 'https://github.com/chthai64/overscroll-bouncy-android'
-    gitUrl = 'https://github.com/chthai64/overscroll-bouncy-android.git'
+    siteUrl = 'https://github.com/dazza5000/overscroll-bouncy-android'
+    gitUrl = 'https://github.com/dazza5000/overscroll-bouncy-android.git'
 
-    libraryVersion = '0.1.1'
+    libraryVersion = '0.1.2'
 
-    developerId = 'chthai64'
-    developerName = 'Chau Thai'
-    developerEmail = 'chthai64@gmail.com'
+    developerId = 'dazza5000'
+    developerName = 'Darran Kelinske'
+    developerEmail = 'darran.kelinske+yeehaw@gmail.com'
 
     licenseName = 'The MIT License (MIT)'
     licenseUrl = 'https://opensource.org/licenses/MIT'

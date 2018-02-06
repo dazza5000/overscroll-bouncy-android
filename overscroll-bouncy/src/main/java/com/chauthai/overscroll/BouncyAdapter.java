@@ -39,7 +39,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
 import java.util.Locale;
 
 /**
@@ -107,7 +106,7 @@ public class BouncyAdapter extends RecyclerView.Adapter implements SpringScrolle
      * True if the RecyclerView is over-scrolled and the user flings back
      * (the opposite direction).
      */
-    private boolean mFlingOverScrollBack = false;  // fling back while over scrolled.
+    private boolean mFlingOverScrollBack = false;  // fling back whilef over scrolled.
 
     /**
      * True if the spring is updated the first time after {@link #startSpringScroll(int)}.
@@ -117,8 +116,10 @@ public class BouncyAdapter extends RecyclerView.Adapter implements SpringScrolle
     private boolean isSpringFirstValue = true;
     private ScrollStartListener scrollStartListener;
 
+    private boolean showEntireFooter = false;
+
     public BouncyAdapter(Context context, RecyclerView recyclerView,
-                          RecyclerView.Adapter adapter,  BouncyConfig config) {
+            RecyclerView.Adapter adapter,  BouncyConfig config) {
         if (recyclerView == null)
             throw new RuntimeException("null RecyclerView");
 
@@ -415,6 +416,9 @@ public class BouncyAdapter extends RecyclerView.Adapter implements SpringScrolle
      * Scroll back with spring mechanism.
      */
     private void scrollBack(int headerVisible, int footerVisible) {
+        if (showEntireFooter) {
+            return;
+        }
         synchronized (lockSpring) {
             mIsScrollBack = true;
             isSpringFirstValue = true;
@@ -516,14 +520,17 @@ public class BouncyAdapter extends RecyclerView.Adapter implements SpringScrolle
                     int visible = (headerVisible > 0) ? headerVisible : footerVisible;
 
                     if (visible > 0) {
-                        if (scrollStartListener != null) {
-                            scrollStartListener.onScrollStart();
-                        }
                         scrollByCount++;
                         mFirstScrollBy = (scrollByCount == 1);
 
+                        if (scrollStartListener != null && (footerVisible > 0) &&
+                                !showEntireFooter) {
+                            scrollStartListener.onStartFooterScroll(footerVisible);
+                            showEntireFooter();
+                        }
+
                         double ratioVisible = (double) visible / mGapLimitPx;
-                        float distance = directionVertical()? distanceY : distanceX;
+                        float distance = directionVertical() ? distanceY : distanceX;
                         double scrollDist = Math.abs(distance - distance * ratioVisible);
 
                         if (distance < 0) {
@@ -578,6 +585,15 @@ public class BouncyAdapter extends RecyclerView.Adapter implements SpringScrolle
                     return true;
                 }
             });
+
+    public void showEntireFooter() {
+        scrollBy((int)dpToPx(115f));
+        showEntireFooter = true;
+    }
+
+    public void hideEntireFooter() {
+        showEntireFooter = false;
+    }
 
     /**
      * Scroll by vertically or horizontally depends on the direction of the
@@ -856,7 +872,7 @@ public class BouncyAdapter extends RecyclerView.Adapter implements SpringScrolle
     }
 
     public interface ScrollStartListener {
-        void onScrollStart();
+        void onStartFooterScroll(final int footerVisible);
     }
 }
 
